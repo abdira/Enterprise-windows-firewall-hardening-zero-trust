@@ -3,7 +3,7 @@
 Implemented IP-based firewall hardening using Windows Defender Firewall + Group Policy to restrict RDP, WinRM, PowerShell, and MMC access to a single trusted admin workstation, enforcing Zero Trust remote administration across a Windows Server Active Directory lab.
 
 📂 Project Folder Structure
-text
+```
 windows-firewall-hardening-secure-remote-administration/
 │
 ├── README.md                                    # Main project documentation
@@ -48,6 +48,9 @@ windows-firewall-hardening-secure-remote-administration/
     ├── 23-firewall-logs.png                    # Firewall log verification
     ├── 24-gpupdate-success.png                 # gpupdate /force success
     └── 25-gpresult-verification.png            # gpresult /r verification
+
+```
+
 📌 Project Overview
 This project demonstrates enterprise-grade security hardening of remote administration services in a Windows Active Directory environment. Using Windows Defender Firewall with Advanced Security and Group Policy, I implemented a Zero Trust remote access model that restricts administrative services to approved IP addresses only.
 
@@ -89,6 +92,8 @@ CLIENT01	Administrative Workstation	192.168.1.20	Windows 10
 OTHER-PC	Unauthorized Test System	192.168.1.50	Windows 10
 Domain: saada.local
 
+```
+
 🧱 Architecture Overview
 text
 ┌─────────────────────────────────────────────────────────────────┐
@@ -127,6 +132,9 @@ text
 │  │  Enforced: Yes                                        │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
+
+```
+
 🔐 Security Design Principles
 Zero Trust Model
 All remote administrative services are explicitly allow-listed by source IP using Windows Defender Firewall rules enforced via Group Policy. Everything else is denied by default.
@@ -348,7 +356,7 @@ Phase 3: Domain-Wide Enforcement
 Local Firewall Configuration (Phase 1)
 Windows Defender Firewall with Advanced Security:
 
-text
+```
 Windows Defender Firewall with Advanced Security
 └── Inbound Rules
     ├── Remote Desktop (TCP-In)
@@ -386,6 +394,9 @@ Windows Defender Firewall with Advanced Security
         ├── Protocol: TCP
         ├── Ports: RPC Dynamic
         └── Scope → Remote IP: 192.168.1.20
+
+```
+```
 Group Policy Configuration (Phase 2)
 GPO Structure:
 
@@ -438,6 +449,9 @@ Group Policy Management Console
                                                 ├── Protocol: TCP
                                                 ├── Ports: RPC Dynamic
                                                 └── Scope: 192.168.1.20
+
+```
+
 💡 Important Note: For enterprise environments, perform these configurations within a GPO to enforce them across all your domain controllers. Use gpupdate /force on the target servers to apply changes and gpresult /r to verify.
 
 GPO Deployment Commands
@@ -464,7 +478,7 @@ Event Viewer	eventvwr.msc → Connect to DC01 from ANY IP	✅ Success
 Services	services.msc → Connect to DC01 from ANY IP	✅ Success
 Visual Representation:
 
-text
+```
 BEFORE HARDENING - ALL SERVICES ACCESSIBLE
 ┌─────────────┐     ┌─────────────┐
 │  CLIENT01   │────▶│             │
@@ -484,9 +498,12 @@ PowerShell	✅ Success	❌ Blocked
 MMC	✅ Success	❌ Blocked
 Event Viewer	✅ Success	❌ Blocked
 Services	✅ Success	❌ Blocked
+
+```
+
 Visual Representation:
 
-text
+```
 AFTER HARDENING - ONLY APPROVED IP ALLOWED
 ┌─────────────┐     ┌─────────────┐
 │  CLIENT01   │────▶│             │
@@ -498,6 +515,9 @@ AFTER HARDENING - ONLY APPROVED IP ALLOWED
 │ 192.168.1.50│ ❌  │             │
 └─────────────┘     └─────────────┘
 Status: CLIENT01 ✅ | OTHER-PC ❌ CONNECTION BLOCKED
+
+```
+
 🧪 Detailed Before and After Testing for MMC/RPC and Logging
 To validate your configurations, use these specific tests:
 
